@@ -1,9 +1,17 @@
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const connectDB = require('./db/db');
 const app = express();
 
-const port = 8000;
+// Load env vars
+dotenv.config({
+  path: './src/config/config.env'
+});
+const PORT = process.env.PORT;
+
+//Connect to DB
+connectDB();
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -19,6 +27,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log('Server started on ' + port);
+app.listen(PORT, () => {
+  console.log(`Server started on ${PORT} port`);
 });

@@ -5,6 +5,8 @@ const connectDB = require('./db/db');
 
 const app = express();
 
+// Import routes
+const lessonsRoutes = require('./routes/lessons');
 const LessonsModel = require('./models/school.model');
 
 // Load env vars
@@ -27,54 +29,7 @@ app.use(
   })
 );
 
-app.get('/api/v1/lessons', async (req, res, next) => {
-  try {
-    const data = await LessonsModel.find().exec();
-    res.status(200).json({
-      success: true,
-      count: data.length,
-      data: data,
-    });
-  } catch (err) {
-    res.status(400).json({ success: false });
-  }
-});
-
-app.get('/api/v1/lessons/:id', async (req, res, next) => {
-  try {
-    const lesson = await LessonsModel.findById(req.params.id).exec();
-    res.status(200).json({
-      success: true,
-      data: lesson,
-    });
-  } catch (err) {
-    res.status(400).json({ success: false });
-  }
-});
-
-app.post('/api/v1/lessons', async (req, res, next) => {
-  try {
-    const lesson = new LessonsModel(req.body);
-    const result = await lesson.save();
-    res.send(result);
-  } catch (err) {
-    res.status(500).json({ success: false });
-  }
-});
-
-app.put('/api/v1/lessons/:id', async (req, res, next) => {
-  try {
-    const lesson = await LessonsModel.findById(req.params.id).exec();
-    lesson.set(req.body);
-    const result = await lesson.save();
-    res.status(201).json({
-      success: true,
-      data: result,
-    });
-  } catch (err) {
-    res.status(400).json({ success: false });
-  }
-});
+app.use('/api/v1/lessons', lessonsRoutes);
 
 app.delete('/api/v1/lessons/:id', async (req, res, next) => {
   try {

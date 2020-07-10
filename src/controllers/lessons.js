@@ -1,8 +1,19 @@
 const LessonsModel = require('../models/school.model');
+
 // Get all lessons
+// GET /api/v1/lessons
+
 exports.getLessons = async (req, res) => {
   try {
-    const data = await LessonsModel.find();
+    const querystring = req.query.teacherName;
+    let data = {};
+    // if we past in query /api/v1/lessons?teacherName=true we see teacher name
+    if (querystring === 'true') {
+      data = await LessonsModel.find().populate({ model: 'teachers', path: 'teacher' }).exec();
+    } else {
+      data = await LessonsModel.find();
+    }
+
     res.status(200).json({
       success: true,
       count: data.length,
@@ -14,6 +25,7 @@ exports.getLessons = async (req, res) => {
 };
 
 // Get single lesson by ID
+// GET /api/v1/lessons/:id
 
 exports.getLesson = async (req, res) => {
   try {
@@ -32,7 +44,8 @@ exports.getLesson = async (req, res) => {
   }
 };
 
-// Post new lesson
+// Post new lesson - /api/v1/lessons
+// POST /api/v1/lessons/
 
 exports.postLesson = async (req, res) => {
   try {
@@ -48,6 +61,7 @@ exports.postLesson = async (req, res) => {
 };
 
 // Update lesson data by ID
+// PUT /api/v1/lessons/:id
 
 exports.updateLesson = async (req, res) => {
   try {
@@ -64,6 +78,7 @@ exports.updateLesson = async (req, res) => {
 };
 
 // Delete lesson by ID
+// DEL /api/v1/lessons/:id
 
 exports.deleteLesson = async (req, res) => {
   try {

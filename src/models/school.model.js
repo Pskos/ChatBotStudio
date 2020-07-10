@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+// eslint-disable-next-line no-unused-vars
+const teacher = require('./teachers.model');
 
 const LessonsSchema = new mongoose.Schema(
   {
@@ -9,8 +11,8 @@ const LessonsSchema = new mongoose.Schema(
       maxlength: [30, 'Title must be < 30 characters'],
     },
     teacher: {
-      type: String,
-      reqired: [true, 'Add Teacher ID'],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'teachers',
     },
     students: {
       type: [String],

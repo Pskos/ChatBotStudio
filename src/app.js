@@ -7,7 +7,6 @@ const app = express();
 
 // Import routes
 const lessonsRoutes = require('./routes/lessons');
-const LessonsModel = require('./models/school.model');
 
 // Load env vars
 dotenv.config({
@@ -30,15 +29,6 @@ app.use(
 );
 
 app.use('/api/v1/lessons', lessonsRoutes);
-
-app.delete('/api/v1/lessons/:id', async (req, res, next) => {
-  try {
-    const result = await LessonsModel.deleteOne({ _id: req.params.id }).exec();
-    res.send(result);
-  } catch (err) {
-    res.status(500).json({ success: false });
-  }
-});
 
 app.listen(PORT, () => {
   console.log(`Server started on ${PORT} port`);
